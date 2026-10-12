@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="How much time you spend talking to AI will decide how far you go. The leverage is already here—what separates people is deliberate thinking, ownership, and using today’s tools on real problems." />
+  <title>How much time you spend talking to AI will decide how far you go</title>
+  <style>
+    :root {
+      --bg: #f7f4ef;
+      --bg-card: #fffdf9;
+      --ink: #1a1a1a;
+      --ink-muted: #5c5a56;
+      --line: #e4dfd6;
+      --accent: #c45c26;
+      --accent-soft: rgba(196, 92, 38, 0.12);
+      --quote-bg: #1c1b19;
+      --quote-ink: #f3efe8;
+      --formula: #2a4a3c;
+      --shadow: 0 12px 40px rgba(28, 27, 25, 0.06);
+      --radius: 14px;
+      --max: 720px;
+      --font: "Iowan Old Style", "Palatino Linotype", "Georgia", "Times New Roman", serif;
+      --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #121110;
+        --bg-card: #1a1917;
+        --ink: #f0ebe3;
+        --ink-muted: #a39e95;
+        --line: #2e2c28;
+        --accent: #e07a45;
+        --accent-soft: rgba(224, 122, 69, 0.16);
+        --quote-bg: #0c0b0a;
+        --quote-ink: #f3efe8;
+        --formula: #8fbfa8;
+        --shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+      }
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--ink);
+      line-height: 1.75;
+      font-size: 18px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(12px);
+      background: color-mix(in srgb, var(--bg) 88%, transparent);
+      border-bottom: 1px solid var(--line);
+      font-family: var(--sans);
+    }
+
+    .topbar-inner {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 0.75rem 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .brand {
+      font-size: 0.8rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+    }
+
+    .lang-link {
+      color: var(--ink-muted);
+      text-decoration: none;
+      font-size: 0.85rem;
+      margin-right: 0.75rem;
+    }
+
+    .lang-link:hover { color: var(--accent); }
+
+    .toc-toggle {
+      border: 1px solid var(--line);
+      background: var(--bg-card);
+      color: var(--ink);
+      border-radius: 999px;
+      padding: 0.35rem 0.9rem;
+      font-size: 0.85rem;
+      cursor: pointer;
+      font-family: var(--sans);
+    }
+
+    .toc-toggle:hover { border-color: var(--accent); color: var(--accent); }
+
+    .toc {
+      display: none;
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 0 1.25rem 1rem;
+      font-family: var(--sans);
+      font-size: 0.9rem;
+    }
+
+    .toc.open { display: block; }
+
+    .toc a {
+      display: block;
+      color: var(--ink-muted);
+      text-decoration: none;
+      padding: 0.35rem 0;
+      border-bottom: 1px dashed var(--line);
+    }
+
+    .toc a:hover { color: var(--accent); }
+
+    .hero {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 3.5rem 1.25rem 2rem;
+    }
+
+    .eyebrow {
+      font-family: var(--sans);
+      font-size: 0.8rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.25rem;
+    }
+
+    h1 {
+      font-size: clamp(1.85rem, 5vw, 2.55rem);
+      line-height: 1.25;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 1.25rem;
+    }
+
+    .subtitle {
+      font-size: 1.05rem;
+      color: var(--ink-muted);
+      line-height: 1.65;
+      max-width: 38em;
+    }
+
+    .meta {
+      margin-top: 1.75rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      font-family: var(--sans);
+      font-size: 0.8rem;
+      color: var(--ink-muted);
+    }
+
+    .pill {
+      border: 1px solid var(--line);
+      background: var(--bg-card);
+      border-radius: 999px;
+      padding: 0.3rem 0.75rem;
+    }
+
+    article {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 0 1.25rem 4rem;
+    }
+
+    .divider {
+      height: 1px;
+      background: var(--line);
+      margin: 2.5rem 0;
+    }
+
+    h2 {
+      font-size: 1.35rem;
+      line-height: 1.35;
+      margin: 2.75rem 0 1.25rem;
+      padding-top: 0.5rem;
+      scroll-margin-top: 4rem;
+    }
+
+    h2 .num {
+      display: block;
+      font-family: var(--sans);
+      font-size: 0.75rem;
+      letter-spacing: 0.14em;
+      color: var(--accent);
+      margin-bottom: 0.4rem;
+      font-weight: 600;
+    }
+
+    p { margin: 0 0 1.15rem; }
+    .lead { font-size: 1.15rem; font-weight: 600; }
+
+    .pullquote {
+      margin: 2rem 0;
+      padding: 1.5rem 1.4rem;
+      background: var(--quote-bg);
+      color: var(--quote-ink);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      font-size: 1.12rem;
+      line-height: 1.55;
+      font-weight: 600;
+    }
+
+    .pullquote.soft {
+      background: var(--accent-soft);
+      color: var(--ink);
+      border: 1px solid color-mix(in srgb, var(--accent) 25%, transparent);
+      box-shadow: none;
+      font-size: 1.05rem;
+    }
+
+    .formula {
+      margin: 2rem 0;
+      padding: 1.4rem 1.25rem;
+      border-left: 4px solid var(--formula);
+      background: var(--bg-card);
+      border-radius: 0 var(--radius) var(--radius) 0;
+      font-weight: 700;
+      font-size: 1.02rem;
+      line-height: 1.55;
+      color: var(--formula);
+    }
+
+    .compare {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.85rem;
+      margin: 1.5rem 0 1.75rem;
+      font-family: var(--sans);
+      font-size: 0.92rem;
+    }
+
+    @media (max-width: 600px) {
+      .compare { grid-template-columns: 1fr; }
+      body { font-size: 17px; }
+    }
+
+    .compare .card {
+      background: var(--bg-card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 1.1rem 1rem;
+      box-shadow: var(--shadow);
+    }
+
+    .compare h3 {
+      font-size: 0.78rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 0.65rem;
+      color: var(--accent);
+      font-family: var(--sans);
+    }
+
+    .compare ul { list-style: none; color: var(--ink-muted); }
+
+    .compare li {
+      padding: 0.35rem 0;
+      border-bottom: 1px dashed var(--line);
+      line-height: 1.5;
+    }
+
+    .compare li:last-child { border-bottom: none; }
+
+    .q-list {
+      margin: 1.25rem 0 1.5rem;
+      padding: 1.1rem 1.25rem;
+      background: var(--bg-card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+    }
+
+    .q-list p { margin: 0.4rem 0; font-weight: 600; }
+
+    .steps {
+      margin: 1.5rem 0 2rem;
+      display: grid;
+      gap: 0.9rem;
+    }
+
+    .step {
+      background: var(--bg-card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 1.15rem 1.2rem;
+      box-shadow: var(--shadow);
+    }
+
+    .step .label {
+      font-family: var(--sans);
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+      font-weight: 700;
+      margin-bottom: 0.35rem;
+    }
+
+    .step strong {
+      display: block;
+      margin-bottom: 0.45rem;
+      font-size: 1.02rem;
+    }
+
+    .step p { margin: 0; color: var(--ink-muted); font-size: 0.98rem; }
+
+    .closing {
+      margin-top: 2.5rem;
+      padding: 1.75rem 1.4rem;
+      background: var(--quote-bg);
+      color: var(--quote-ink);
+      border-radius: var(--radius);
+    }
+
+    .closing p { margin-bottom: 0.85rem; }
+    .closing p:last-child { margin-bottom: 0; font-weight: 700; font-size: 1.1rem; }
+
+    .quotes-section {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 0 1.25rem 4rem;
+    }
+
+    .quotes-section h2 {
+      font-family: var(--sans);
+      font-size: 1.1rem;
+      margin-bottom: 1rem;
+    }
+
+    .quote-grid { display: grid; gap: 0.75rem; }
+
+    .quote-card {
+      font-family: var(--sans);
+      font-size: 0.95rem;
+      line-height: 1.6;
+      padding: 1rem 1.1rem;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--bg-card);
+      color: var(--ink);
+    }
+
+    footer {
+      border-top: 1px solid var(--line);
+      padding: 2rem 1.25rem 3rem;
+      text-align: center;
+      font-family: var(--sans);
+      font-size: 0.85rem;
+      color: var(--ink-muted);
+    }
+
+    .progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 3px;
+      width: 0;
+      background: var(--accent);
+      z-index: 30;
+    }
+  </style>
+</head>
+<body>
+  <div class="progress" id="progress" aria-hidden="true"></div>
+
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">AI × Judgment</div>
+      <div>
+        <a class="lang-link" href="index.html">中文</a>
+        <button type="button" class="toc-toggle" id="tocToggle" aria-expanded="false">Contents</button>
+      </div>
+    </div>
+    <nav class="toc" id="toc" aria-label="Table of contents">
+      <a href="#s1">1. Distance from leverage</a>
+      <a href="#s2">2. What’s worth doing—and ownership</a>
+      <a href="#s3">3. Don’t wait for a better model</a>
+      <a href="#s4">4. One formula</a>
+      <a href="#s5">5. Seven-day system</a>
+      <a href="#quotes">Lines worth sharing</a>
+    </nav>
+  </header>
+
+  <header class="hero">
+    <p class="eyebrow">Essay · Work · Judgment</p>
+    <h1>How much time you spend talking to AI will decide how far you go</h1>
+    <p class="subtitle">The leverage is already here. What separates people now is whether you think on purpose, own your calls, and use today’s tools on real problems—instead of waiting for a smarter model.</p>
+    <div class="meta">
+      <span class="pill">~8 min read</span>
+      <span class="pill">Active depth × Judgment × Action now</span>
+    </div>
+  </header>
+
+  <article>
+    <p class="lead">How much time you spend talking to AI will decide how far you go.</p>
+
+    <p>That sounds harsh. I’ll make it harsher: this is not a “prompt skills” quiz. It’s a distance problem—how close you live to the most advanced cognitive leverage available right now.</p>
+
+    <p>Same company. Same role. Two people. A puts real work into the chat every day—strategy drafts, customer pushback, product tradeoffs, the judgment behind the weekly update. B opens the tool when it’s convenient, pastes something out, and otherwise defaults to old habits: search docs, ping a colleague, wing it. Three years later the gap rarely looks like “who knew better prompts.” It looks like who already works inside a new default—and who is still grinding inside the old one.</p>
+
+    <p class="pullquote">Advanced productivity never distributes itself evenly to people who have heard of a tool. It accrues to people who put their hands on it daily.</p>
+
+    <p>This piece is about three things:</p>
+    <p>First: time with AI—and the quality of that time—is the speed at which you absorb new leverage. Passive use doesn’t count. Active use does.<br />
+    Second: in an AI era, the scarce skills are deciding what is worth doing and being willing to own the consequences—not “how to do the steps” (that’s where models are strong).<br />
+    Third: electricity took decades to reshape society. Even if large models stopped improving tomorrow, this wave of AI could still reshape work and life for twenty or thirty years. So the useful question is not “what will the next model unlock?” It’s: what can I solve with what exists today?</p>
+
+    <div class="divider"></div>
+
+    <h2 id="s1"><span class="num">01</span>Time with AI is distance from advanced leverage</h2>
+
+    <p>Strip away the hype and the panic. AI is becoming infrastructure for thinking and expression: turning fuzzy ideas into structure, expanding one option into ten, iterating a rough draft into something you can ship. It isn’t magic. It is leverage.</p>
+
+    <p>Leverage has a brutal property: if you don’t hold it, it isn’t yours.</p>
+
+    <p>Plenty of people believe they “already use AI.” They’ve opened it. Generated text. Shared a screenshot. Pull the usage log and the truth is thin—sporadic, reactive, aimed at saving five minutes rather than changing how they think.</p>
+
+    <p>You have to separate passive from active.</p>
+
+    <div class="compare" role="group" aria-label="Passive vs active">
+      <div class="card">
+        <h3>Passive</h3>
+        <ul>
+          <li>Outsource the deliverable, copy, ship</li>
+          <li>Chat ends when paste ends</li>
+          <li>Saves time; practices outsourcing</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Active</h3>
+        <ul>
+          <li>Walk in with problem, constraints, taste</li>
+          <li>Push back; demand counterexamples</li>
+          <li>Spar until your judgment sharpens</li>
+        </ul>
+      </div>
+    </div>
+
+    <p>Passive looks like this: drop a task in, wait for something presentable, copy, ship, done. The model finished the deliverable. Your brain barely entered the room. You saved time. You practiced outsourcing. You did not practice judgment.</p>
+
+    <p>Active is different. You walk in with a problem, constraints, taste, and a provisional take. You push back. You ask for counterexamples, decision trees, failure modes—“If I pick A, where does this die in ninety days?” The model becomes a sparring partner, not a ghostwriter. When the chat ends, what improved is the model in your head—not just the word count in a doc.</p>
+
+    <p class="pullquote">Your ceiling is not set by the model version. It’s set by whether you put real work into the conversation today.</p>
+
+    <p>We’ve seen this movie. Spreadsheets didn’t reward people who had “heard of Excel.” They rewarded people who put the business into the grid every week. Search didn’t reward “knowing Google exists.” It rewarded people who could decompose a question, check sources, and cross-wire answers. Smartphones made some people a mobile office and others a short-video terminal. Tools get cheap. Workflows stay expensive.</p>
+
+    <p>AI is the same pattern at a higher frame rate.</p>
+
+    <p>There’s a popular fear: the more you use it, the lazier you get. Fair risk—if you outsource thinking entirely, you atrophy. The quieter, wider risk is the opposite: people who don’t use it, or only skim it, drift out of the new default way of working without noticing. A peer has already pressure-tested three rounds of a plan in chat while you’re still staring at a blank page. A competitor has already rehearsed the customer’s objections; you hear them for the first time in the meeting. You don’t get fired in a dramatic moment. You get left behind by the default.</p>
+
+    <p>So “how many hours a day” is not a self-help slogan. It’s a rough proxy. Hours aren’t sacred. What sits behind the hours is repetition, context, and how much real friction you feed into the new leverage. Three deep hours a week usually beat ten shallow minutes a day—one builds a system; the other builds a habit of checking a box.</p>
+
+    <p class="pullquote soft">You bring judgment and questions first. AI amplifies. Bring nothing, and you get a more fluent noise machine.</p>
+
+    <p>Before the next important chat, force three lines: what I’m solving, what the constraints are, what I already lean toward. Without those lines, you’re mostly consuming generated content. With them, you’re training decision muscle. Pretty output is raw material. Material only becomes capability when it passes through your judgment.</p>
+
+    <p>“I’m too busy” is the wrong objection. Busy is exactly when the highest-leverage hour belongs in the dialogue—not another meeting, but the one stuck problem that is blocking the rest. The best investment in a day is often not two more emails. It’s one hard call moved from stuck to executable.</p>
+
+    <p>Distance from advanced leverage is not a knowledge problem. It’s a calendar problem. Your calendar doesn’t lie.</p>
+
+    <h2 id="s2"><span class="num">02</span>What’s scarce isn’t “how.” It’s “what’s worth doing” and “I’ll own it”</h2>
+
+    <p>The cost of execution is collapsing.</p>
+
+    <p>A decent plan, a complex workflow broken into steps, external messaging, a data story someone can actually read—those used to cost person-days. First drafts of those things are now cheap, fast, and parallelizable. The world didn’t get simpler. The option set exploded.</p>
+
+    <p class="pullquote soft">When information was scarce, the bottleneck was access. When options are infinite, the bottleneck is judgment.</p>
+
+    <p>Models are getting stronger precisely where “how” lives: steps, structure, copy, code drafts, comparison tables, risk lists. They can move you from 0 to 60 fast—sometimes to 80. Which creates a counterintuitive fact:</p>
+
+    <p class="pullquote">AI made “looking polished” cheap. Doing the right thing and signing your name under it got more expensive.</p>
+
+    <p>Polished plans can be mass-produced. Worthiness cannot. Worth involves ranking value, opportunity cost, who actually benefits, and whether you’ll stake time and reputation on the bet. A model can brief you. It cannot give you a stance.</p>
+
+    <p>So the scarce capabilities come in a pair—and they have to stay paired.</p>
+
+    <p><strong>First: deciding what is worth doing.</strong></p>
+
+    <p>Worth is not hype, not “everyone’s doing it,” not the model saying “great idea.” Worth is: given finite attention, does this rank? If it works, whose life or business actually improves? If it fails, can you afford it? And—for the same hour—is there a sharper cut? Topic selection used to be a specialist craft for editors and PMs. It’s becoming a survival skill for everyone.</p>
+
+    <p><strong>Second: willingness to own the choice.</strong></p>
+
+    <p>Credit, decision rights, and blame still sit on humans. AI can list tradeoffs, role-play dissent, even draft the memo that says “we’re going this way.” Three years later, when the project dies, the direction was wrong, or trust broke, the person who says “that was my call” will not be the chat window.</p>
+
+    <p>Ownership is scarce because it’s costly. It asks you to decide under uncertainty and put your name on the outcome. A lot of people like AI precisely because it blurs the accountability line: “the model suggested it.” That sentence is organizationally safe and personally corrosive. The more you hide behind it, the more you become a high-end executor—and the less you become a decider.</p>
+
+    <p>Make it concrete.</p>
+
+    <p>Product direction: AI can list ten features, five user paths, three competitor briefs. It cannot decide whether this quarter you bet retention or acquisition—or which half you kill when resources run out.</p>
+
+    <p>Content: AI can spit out a hundred titles. It cannot feel which line you actually believe, which is pure bait, and which you’ll regret publishing.</p>
+
+    <p>Career moves: AI can compare comp, industries, skill stacks. It cannot carry the cost of moving farther from family, starting over, or staying comfortable two years too long.</p>
+
+    <p>Whether to go all-in on a technology: AI can narrate the trend. A trend is not destiny. Destiny is the path dependence after you sign.</p>
+
+    <p>See the shift? “How” is being outsourced. “What” and “who owns it” are appreciating.</p>
+
+    <p>This has to lock with the first point. If you spend hours with AI only practicing “finish the task,” you become an enhanced execution module—faster, cleaner, more replaceable. Use the dialogue to force the harder questions instead:</p>
+
+    <div class="q-list">
+      <p>Is this worth it?</p>
+      <p>Why this over that?</p>
+      <p>Can I carry the downside?</p>
+      <p>If I can only do one thing, what do I cut?</p>
+    </div>
+
+    <p>AI is excellent at relieving execution anxiety. It’s also excellent at hiding you inside busy execution. The real use is letting it back your judgment into a corner—then you take the step yourself.</p>
+
+    <p>Irreplaceability is migrating from “I can do technical work others can’t” toward “I can choose well in noise and own the choice.” Craft still matters. The premium structure changed. You can do the work; AI can often help. Daring to choose and willing to own—that’s still what organizations and eras pay up for.</p>
+
+    <h2 id="s3"><span class="num">03</span>Electricity took decades. Don’t wait for a better model</h2>
+
+    <p>There’s a quiet, popular form of waiting: I’ll get serious when a better model ships.</p>
+
+    <p>As if seriousness were a ceremony that requires frontier compute. Until then, watching, bookmarking, forwarding benchmarks is enough.</p>
+
+    <p>An old metaphor clears the fog: electricity.</p>
+
+    <p>Electricity did not remake society on invention day. After generation came factory motors, lighting, appliances, then a slow rewrite of how production and life were organized—and only later the information technologies that sit on top of power. That arc is decades, not weeks. General-purpose tech penetrates through applications, processes, habits, and institutions—not through one lab leap in the news.</p>
+
+    <p>Map that onto AI. Model capability is the first half. The second half is rewritten workflows, reorganized roles, and a new personal default for how work gets done. Even if the capability curve flattened tomorrow—no more breakthroughs—the capabilities already released could still reshape structures and methods for twenty or thirty years. Most organizations have not fully used what exists. Most individuals have not embedded today’s models into a daily loop.</p>
+
+    <p class="pullquote">The fattest window of tech surplus is often not when capability peaks. It’s when most people are still watching.</p>
+
+    <p>The “better” you’re waiting for may be real. Your competitor, your teammate, the person one desk over who deep-works an hour a day in chat—they’re using <em>now</em>. Now already rewrites a lot: draft iteration speed, breadth of option comparison, density of help on code and analysis, a private coach for learning, pre-mortems before big calls.</p>
+
+    <p>The bottleneck is rarely two more percentage points of model quality. It’s whether you feed real problems in and close the loop.</p>
+
+    <p>A loop is: real question → multi-round pressure → you decide → reality happens → you feed the outcome back. Miss a link and you’re “experiencing AI,” not working with it. Experience produces conversation fodder. Loops produce compounding.</p>
+
+    <p>Flip the strategy.</p>
+    <p><strong>Don’t ask what the next model will do.</strong><br />
+    <strong>Ask which real problems today’s model can already solve reliably for you.</strong></p>
+
+    <p>Writing: throw in half-finished work and force structure, opposition, misreads a reader might make.<br />
+    Decisions: ask for tradeoffs—and for the earliest failure signal if you’re wrong.<br />
+    Specialist work: use it as an assistant, never as an unsigned final authority.<br />
+    Learning: not to memorize for you—to quiz you at your stuck points, push, and correct.</p>
+
+    <p>You’ll notice the stuck points are rarely “the model isn’t strong enough.” They’re “I didn’t define the problem” or “I won’t decide after the output.” Even if models froze, your usage still has a long climb—that’s the electricity point. Once infrastructure is in place, the gap shifts to who rewrites the org playbook and who rewrites their personal one first.</p>
+
+    <p>Waiting for the perfect model buys comfort: I’m not lazy; I’m waiting for a better gun. The field doesn’t wait. The gun is already on the table. It’s good enough. What’s missing is aim, trigger, and the debrief after the shot.</p>
+
+    <p>Twenty or thirty years is not a scare number. It’s a permission number. You don’t need to spiral over every benchmark drop. You should worry about continuity of use. Long-termism here is concrete: not predicting which lab wins, but turning advanced leverage into habit. Habits compound. News cycles don’t.</p>
+
+    <h2 id="s4"><span class="num">04</span>Three ideas, one formula</h2>
+
+    <p>Compress the three points into one line you can pass on:</p>
+
+    <div class="formula">
+      Time (active depth) × Judgment (what’s worth it + ownership) × Action now (don’t wait for a better model) = your real progress in the AI era
+    </div>
+
+    <p>Three multipliers. Any one at zero, product is zero.</p>
+
+    <p>People who only scroll model news, debate trends, and hoard prompt packs are spectators. Spectators have takes. They don’t have progress.</p>
+
+    <p>People who only let AI do the work—no thinking, no choice, no signature—are passive executors. Executors ship. Substitutability rises with them.</p>
+
+    <p>People who talk to AI on purpose every day, feed it real work, rank value when options explode, own the call, and solve today’s problems with today’s models instead of waiting for perfection—those people are wiring advanced leverage into ordinary life.</p>
+
+    <p>Wiring it into ordinary life sounds plain. It’s the hard part. You don’t need to become an AI expert. You need to get honest about your calendar and your judgment.</p>
+
+    <p>I’m still learning. I get lazy. I use chat as a ghostwriter. I refresh rumors about the next release. That’s exactly why I trust this: the gap doesn’t show up in attitude posts. It shows up in dozens of small choices—whether this hour you open the dialogue and break one hard problem, or push the problem to “later.”</p>
+
+    <p class="pullquote soft">Later is expensive. Now is cheap. Most people pay interest on later.</p>
+
+    <h2 id="s5"><span class="num">05</span>A seven-day system that isn’t motivational junk</h2>
+
+    <p>If you leave with a feeling and nothing else, the piece failed. Here’s a system small enough to be almost embarrassing—and runnable.</p>
+
+    <div class="steps">
+      <div class="step">
+        <div class="label">STEP 01</div>
+        <strong>One fixed deep session a day (30–60 minutes)</strong>
+        <p>One real work problem only. Not boredom chat. Not “write my social post.” The topic has to come from something you must ship, decide, or move this week.</p>
+      </div>
+      <div class="step">
+        <div class="label">STEP 02</div>
+        <strong>Before any important chat, three lines</strong>
+        <p>Goal: what result I need. Constraints: time, resources, red lines. Prior lean: what I already favor and why. No three lines, no start. That’s how you keep the initiative.</p>
+      </div>
+      <div class="step">
+        <div class="label">STEP 03</div>
+        <strong>End with two forced sentences</strong>
+        <p>My decision is ___. The risk I’m carrying is ___. You can delete the model’s essay. You cannot skip these two. Skip them and you’re passive again.</p>
+      </div>
+      <div class="step">
+        <div class="label">STEP 04</div>
+        <strong>Weekly review, one question</strong>
+        <p>Which three loops did AI help me close this week? Not “how much did I chat.” Time is a means. Closed loops are the score. Three is enough. Zero is fine if you record it honestly—and change the topics next week, not the slogans.</p>
+      </div>
+    </div>
+
+    <p>Seven days won’t change your fate. Seven days will test one thing: whether you actually want to stand on the advanced-leverage side. Pass the test, run week two. Habit’s enemy isn’t difficulty. It’s interruption.</p>
+
+    <div class="closing">
+      <p>Back to the title.</p>
+      <p>How much time you spend talking to AI will decide how far you go—because AI is the sharpest cognitive leverage on the table, and your time plus your initiative decide how close you live to it.</p>
+      <p>How far you go will not depend on catching every model launch. It will depend on three plain habits: feed real problems into the dialogue; after “how” gets cheap, guard “what’s worth doing” and “I’ll own it”; while others wait for a better gun, use the one on the table and hit today’s target.</p>
+      <p>The leverage is already here. It will not wait extra years because you’re watching. It will not climb onto your calendar because you’re anxious.</p>
+      <p>How far you go is what you invest—one deliberate hour at a time.</p>
+    </div>
+  </article>
+
+  <section class="quotes-section" id="quotes">
+    <h2>Lines worth sharing</h2>
+    <div class="quote-grid">
+      <div class="quote-card">How much time you spend talking to AI will decide how far you go.</div>
+      <div class="quote-card">Your ceiling isn’t the model version. It’s whether real work enters the chat today.</div>
+      <div class="quote-card">AI made polished execution cheap. Doing the right thing and signing for it got expensive.</div>
+      <div class="quote-card">The fattest tech window isn’t peak capability—it’s when most people are still watching.</div>
+      <div class="quote-card">Time (active depth) × Judgment (worth + ownership) × Action now = real progress in the AI era.</div>
+      <div class="quote-card">Bring judgment first and AI amplifies. Bring nothing and you get fluent noise.</div>
+      <div class="quote-card">Later is expensive. Now is cheap. Most people pay interest on later.</div>
+      <div class="quote-card">You don’t need to become an AI expert. You need honesty about your calendar and your calls.</div>
+    </div>
+  </section>
+
+  <footer>
+    English rewrite · Not a translation ·
+    <a class="lang-link" href="index.html">Chinese version</a> ·
+    <a class="lang-link" href="how-much-time-you-spend-with-ai.md">Markdown</a>
+  </footer>
+
+  <script>
+    (function () {
+      var toggle = document.getElementById("tocToggle");
+      var toc = document.getElementById("toc");
+      var bar = document.getElementById("progress");
+
+      toggle.addEventListener("click", function () {
+        var open = toc.classList.toggle("open");
+        toggle.setAttribute("aria-expanded", open ? "true" : "false");
+      });
+
+      toc.querySelectorAll("a").forEach(function (a) {
+        a.addEventListener("click", function () {
+          toc.classList.remove("open");
+          toggle.setAttribute("aria-expanded", "false");
+        });
+      });
+
+      window.addEventListener("scroll", function () {
+        var doc = document.documentElement;
+        var max = doc.scrollHeight - doc.clientHeight;
+        var pct = max > 0 ? (doc.scrollTop / max) * 100 : 0;
+        bar.style.width = pct + "%";
+      }, { passive: true });
+    })();
+  </script>
+</body>
+</html>
